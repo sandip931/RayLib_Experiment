@@ -35,9 +35,12 @@ int main(){
   f.color = GREEN;
 
   int points = 0;
-  bool isEaten = true;
   Vector2 direction={1,0}; // {x,y}
   Color bgcolor = BACKGROUND;
+      //--------------------------- BOOLS  -------------------------------
+  bool pointSet=false;
+  bool isEaten = true;
+
   //////// --------------- INITIALIZATIONS . --------------------------------------
 
   
@@ -70,8 +73,10 @@ int main(){
     }
 
     ///////////------------ auto events ----------------
-      s.position.x += s.speed*dt*direction.x; ///default goint right snake    
-      s.position.y += s.speed*dt*direction.y; ///default goint right snake    
+      if(pointSet){
+        s.position.x += s.speed*dt*direction.x; ///default goint right snake    
+        s.position.y += s.speed*dt*direction.y; ///default goint right snake    
+      }
     BeginDrawing();
     ClearBackground(bgcolor);
     if(isEaten){

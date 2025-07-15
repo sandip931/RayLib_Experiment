@@ -54,7 +54,7 @@ int main(){
       }
 
       
-      if(!isClicked){
+      if(!isClicked && count>=maxPositions){
         if(GuiButton((Rectangle){ 24, 24, 190, 30 }, "#191#Start Game")){
           isClicked = true; 
         }
