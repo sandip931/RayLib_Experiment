@@ -30,14 +30,24 @@ int main(){
   player.rad=9;
   float copyRad = player.rad;
   /// player property 
+  
+  /// rolling ball player properties 
+  ball player2;
+  player2.rad = 12;
+  player2.pos={player2.rad + 22,groundPoint- player2.pos.y};
+  Vector2 rotatingBallTempPos = player2.pos;
+  /// rolling ball player properties 
+
   // physics object properties 
   phy.gravity = .91;
   phy.velocity = 0;
-  phy.bounce = -0.98;
+  phy.bounce = -1;
 
   phyobj.rad = 12;
   phyobj.offest = 9;
   phyobj.pos = {winSize.x/2, 0 + phyobj.rad + phyobj.offest};
+  Vector2 tempPos = phyobj.pos;
+
   // physics object properties 
   //
   ///
@@ -47,17 +57,20 @@ int main(){
   {
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
-    dt = GetFrameTime();
+      dt = GetFrameTime();
 
-     ////////// auto update gravity
-        phy.velocity += phy.gravity;
-        phyobj.pos.y += phy.velocity;
-        if(phyobj.pos.y>=groundPoint){
-          phyobj.pos.y = groundPoint;
-          phy.velocity *= phy.bounce;
-        }
-        phy.gravity = 1.5;
-        phyobj.pos.y+=5;
+      ////////// auto update gravity
+      phy.velocity += phy.gravity;
+      phyobj.pos.y += phy.velocity;
+      if(phyobj.pos.y>=groundPoint){
+        phyobj.pos.y = groundPoint;
+        phy.velocity *= phy.bounce;
+      }
+
+      phy.gravity = 1.5;
+      /// ball movement towards x axis right 
+      player2.pos.x += 3; 
+      
       /// player action movement data ----------- 
       if(IsKeyDown(KEY_RIGHT)){
         player.pos.x += 12;
@@ -81,12 +94,59 @@ int main(){
       }
 
       /// player action movement data ----------- 
+
+      // revert physics object position 
+
+      if(IsKeyPressed(KEY_SPACE)){
+        phyobj.pos = tempPos;
+      }
+
+      if(IsKeyPressed(KEY_TAB)){
+        player2.pos = rotatingBallTempPos;
+      }
+
       BeginDrawing();
       {
         ClearBackground(dark);
         // DrawLineEx(Vector2 startPos, Vector2 endPos, float thick, Color color)
-        DrawLineEx(Vector2{0,winSize.y/2},Vector2{winSize.x,winSize.y/2},22,PURPLE);
+        
+        // GROUND LINE  
+        DrawLineEx(Vector2{0,winSize.y/2},Vector2{winSize.x,winSize.y/2},22,GRAY);
+        // GROUND LINE 
+
+        // player line axis from left
+        DrawLineEx(Vector2{0,winSize.y/2},Vector2{player.pos.x,player.pos.y},2,MAROON);
+
+       // player line axis from right  
+        DrawLineEx(Vector2{winSize.x,winSize.y/2},Vector2{player.pos.x,player.pos.y},2,RED);
+        
+        // moving line from ball to player 
+
+        DrawLineEx(Vector2{phyobj.pos.x,phyobj.pos.y},Vector2{player.pos.x,player.pos.y},2,GREEN);
+
+        //// line for bouncing object 
+        DrawLineEx(Vector2{winSize.x/2,0},Vector2{phyobj.pos.x,phyobj.pos.y},2,PURPLE);
+        //// line for bouncing object 
+        
+        // line from x axis moving object to player  
+        DrawLineEx(Vector2{player2.pos.x,player2.pos.y},Vector2{player.pos.x,player.pos.y},2,RAYWHITE);
+        // END OF line from x axis moving object to player  
+        
+        // player object moving object 
         DrawCircle(player.pos.x,player.pos.y,player.rad,ORANGE);
+
+
+        // rolling circle 
+        DrawCircle(player2.pos.x,player2.pos.y,player2.rad,MAGENTA);
+
+        // DrawLineEx((Vector2){0, groundPoint}, (Vector2){winSize.x, groundPoint}, 4.0f, DARKGRAY);
+        DrawLineEx(
+            (Vector2){0, groundPoint + phyobj.rad},
+            (Vector2){winSize.x, groundPoint + phyobj.rad},
+            4.0f,
+            DARKGRAY
+            );
+
         ballDraw(phyobj,WHITE);
       }
 
