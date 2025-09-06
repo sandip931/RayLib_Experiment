@@ -19,7 +19,7 @@ int main() {
     bool setMotion = false;
     ball player;
     player.rad = 14;
-    player.pos = {winSize.x / 2, winSize.y / 2};
+    player.pos = {20, winSize.y / 2};
     player.color = ORANGE;
     float speed = 3;
 
@@ -33,7 +33,7 @@ int main() {
 
     while (!WindowShouldClose()) {
         /// processes
-        if (IsKeyPressed(KEY_X)) {
+        if (IsKeyPressed(KEY_SPACE)) {
             setMotion = true;
         }
 
